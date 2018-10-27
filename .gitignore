@@ -1,0 +1,9 @@
+.idea
+.DS_Store
+
+/config.cfg
+
+# Generated files
+*.pyc
+/data/cacert.pem
+/data/state.json

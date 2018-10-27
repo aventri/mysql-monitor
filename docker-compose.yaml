@@ -1,0 +1,45 @@
+# Docker compose for demonstration of the MySQL monitor application
+
+version: '3'
+services:
+  mysql-monitor:
+    build:
+      context: .
+      dockerfile: docker/monitor/Dockerfile
+    image: mysql-monitor
+    volumes:
+      # Mounting just the data dir is required to persist state across restarts
+      #- ./data:/usr/src/app/data
+      # Mount the whole app for editing source without rebuilding
+      - .:/usr/src/app
+    depends_on:
+      - db
+      - queue
+
+  # Small demo database instance
+  db:
+    build:
+      context: .
+      dockerfile: docker/db/Dockerfile
+    image: db
+    environment:
+      MYSQL_ROOT_PASSWORD: monitor
+      MYSQL_USER: monitor
+      MYSQL_PASSWORD: monitor
+      MYSQL_DATABASE: monitor_test
+    ports:
+      - "3306:3306"
+
+  queue:
+    image: rabbitmq:3.7-alpine
+    ports:
+      - "5672:5672"
+
+  # Simple subscriber script to demonstrate the system is working and see what messages will look like
+  subscriber:
+    build:
+      context: .
+      dockerfile: docker/subscriber/Dockerfile
+    image: subscriber
+    depends_on:
+      - queue

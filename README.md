@@ -61,9 +61,9 @@ of messages when the same rows are repeatedly updated in a short period of time.
 In the environment the monitor was originally built for, we've watched it easily handle hundreds of messages per second. 
 The de-duping buffer reduced message volume by at least 10%.
 
-The system will periodically save it's stated to the `data` directory. This allows the monitor to continue from the 
+The system will periodically save it's state to the `data` directory. This allows the monitor to continue from the 
 last binlog position it processed after being restarted.  The current binlog position is only recorded after the related 
-messages are sent to RabbitMQ.  This guarantees no data is lost of the connection to RabbitMQ is dropped.
+messages are sent to RabbitMQ.  This guarantees no data is lost if the connection to RabbitMQ is dropped.
 
 Messages
 --------------
